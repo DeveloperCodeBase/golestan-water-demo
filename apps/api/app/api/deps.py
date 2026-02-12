@@ -8,7 +8,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
-from app.core.security import decode_token
+from app.core.security import TokenDecodeError, decode_token
 from app.db.models import Permission, Role, RolePermission, User, UserRole
 from app.db.session import get_db
 
@@ -54,7 +54,11 @@ def get_current_user(
     if credentials is None:
         raise HTTPException(status_code=401, detail={"code": "unauthorized", "message": "Missing authorization token"})
 
-    payload = decode_token(credentials.credentials)
+    try:
+        payload = decode_token(credentials.credentials)
+    except TokenDecodeError as exc:
+        raise HTTPException(status_code=401, detail={"code": exc.code, "message": exc.message}) from exc
+
     if payload.get("type") != "access":
         raise HTTPException(status_code=401, detail={"code": "unauthorized", "message": "Invalid token type"})
 

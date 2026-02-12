@@ -123,7 +123,7 @@ export default function ScenarioLabPage({ params }: any) {
                 </option>
               ))}
             </Select>
-            <Button variant="outline" onClick={simulateSelected} disabled={!token || !selectedScenarioId || actionLoading || !canRunScenario}>
+            <Button className="w-full" variant="outline" onClick={simulateSelected} disabled={!token || !selectedScenarioId || actionLoading || !canRunScenario}>
               {actionLoading ? "در حال شبیه‌سازی..." : "شبیه‌سازی سناریوی انتخابی"}
             </Button>
 
@@ -168,7 +168,22 @@ export default function ScenarioLabPage({ params }: any) {
           </div>
 
           <Panel title="خروجی روزانه شبیه‌سازی">
-            <div className="overflow-x-auto">
+            <div className="space-y-2 sm:hidden">
+              {points.length ? (
+                points.slice(0, 14).map((row: any, idx: number) => (
+                  <article key={`${row.ts}-${idx}`} className="rounded-lg border p-2 text-xs">
+                    <p className="font-semibold">{formatDatePersian(row.ts)}</p>
+                    <p className="text-muted-foreground">ورودی: {Number(row.inflow).toFixed(2)}</p>
+                    <p className="text-muted-foreground">رهاسازی: {Number(row.release).toFixed(2)}</p>
+                    <p className="text-muted-foreground">ذخیره: {Number(row.storage).toFixed(2)}</p>
+                  </article>
+                ))
+              ) : (
+                <p className="text-xs text-muted-foreground">هنوز خروجی شبیه‌سازی برای این سناریو ثبت نشده است.</p>
+              )}
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
               <Table className="min-w-[720px]">
                 <TableHeader>
                   <TableRow>

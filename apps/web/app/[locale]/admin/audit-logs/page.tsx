@@ -44,7 +44,18 @@ export default function AuditLogsPage({ params }: any) {
             onChange={(e) => setFilter(e.target.value)}
             className="mb-3 max-w-sm"
           />
-          <div className="overflow-x-auto">
+          <div className="space-y-2 sm:hidden">
+            {logs.data.map((row) => (
+              <article key={row.id} className="rounded-lg border p-2 text-xs">
+                <p className="font-semibold">{row.action}</p>
+                <p className="text-muted-foreground">زمان: {formatDateTimePersian(row.created_at)}</p>
+                <p className="text-muted-foreground">موجودیت: {row.entity}</p>
+                <p className="text-muted-foreground">کاربر: {row.actor_user_id ?? "-"}</p>
+                <p className="mt-1 truncate text-muted-foreground">جزئیات: {JSON.stringify(row.details)}</p>
+              </article>
+            ))}
+          </div>
+          <div className="hidden overflow-x-auto sm:block">
             <Table className="min-w-[880px]">
               <TableHeader>
                 <TableRow>
@@ -73,4 +84,3 @@ export default function AuditLogsPage({ params }: any) {
     </ModulePage>
   );
 }
-

@@ -40,6 +40,15 @@ def test_health_and_ready():
     assert ready.status_code == 200
 
 
+def test_login_can_repeat_without_refresh_token_collision():
+    first = client.post("/auth/login", json={"username": "viewer", "password": "vi123"})
+    second = client.post("/auth/login", json={"username": "viewer", "password": "vi123"})
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert first.json()["data"]["refresh_token"] != second.json()["data"]["refresh_token"]
+
+
 def test_auth_and_core_endpoints():
     headers = _login()
 
@@ -85,3 +94,17 @@ def test_auth_and_core_endpoints():
     assert owner_chat.status_code == 200
     answer = owner_chat.json()["data"]["answer"]
     assert "شرکت شبکه هوشمند ابتکار ویستا" in answer
+
+
+def test_invalid_or_expired_token_returns_401_not_500():
+    bad_headers = {"Authorization": "Bearer invalid.token.value"}
+
+    timeseries = client.get("/timeseries?metric=inflow&page=1&page_size=20", headers=bad_headers)
+    assert timeseries.status_code == 401
+    body = timeseries.json()
+    assert body["error"]["code"] in {"invalid_token", "token_expired"}
+
+    refresh = client.post("/auth/refresh", json={"refresh_token": "invalid.token.value"})
+    assert refresh.status_code == 401
+    refresh_body = refresh.json()
+    assert refresh_body["error"]["code"] in {"invalid_token", "token_expired"}

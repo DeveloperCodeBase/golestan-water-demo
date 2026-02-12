@@ -65,29 +65,44 @@ export function RunsTable({ data }: { data: RunRow[] }) {
   });
 
   return (
-    <div className="overflow-x-auto rounded-xl border bg-card p-2">
-      <Table className="min-w-[720px]">
-        <TableHeader>
-          {table.getHeaderGroups().map((group) => (
-            <TableRow key={group.id}>
-              {group.headers.map((header) => (
-                <TableHead key={header.id} className="cursor-pointer" onClick={header.column.getToggleSortingHandler()}>
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="rounded-xl border bg-card p-2">
+      <div className="space-y-2 md:hidden">
+        {data.map((row) => (
+          <article key={row.id} className="rounded-lg border p-3 text-xs">
+            <p className="font-semibold">{row.id}</p>
+            <p className="mt-1 text-muted-foreground">سناریو: {scenarioLabel(row.scenario)}</p>
+            <p className="text-muted-foreground">افق: {row.horizon} روز</p>
+            <p className="text-muted-foreground">تامین: {Math.round(Number(row.satisfaction) * 100)}%</p>
+            <p className="text-muted-foreground">ریسک: {Math.round(Number(row.risk) * 100)}%</p>
+            <p className="text-muted-foreground">زمان: {formatDateTimePersian(row.created_at)}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto md:block">
+        <Table className="min-w-[720px]">
+          <TableHeader>
+            {table.getHeaderGroups().map((group) => (
+              <TableRow key={group.id}>
+                {group.headers.map((header) => (
+                  <TableHead key={header.id} className="cursor-pointer" onClick={header.column.getToggleSortingHandler()}>
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

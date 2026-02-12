@@ -4,8 +4,10 @@ import hashlib
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional
+from uuid import uuid4
 
 from jose import JWTError, jwt
+from jose.exceptions import ExpiredSignatureError
 from passlib.context import CryptContext
 
 from app.core.config import get_settings
@@ -15,6 +17,13 @@ pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
 
 class PasswordPolicyError(ValueError):
     pass
+
+
+class TokenDecodeError(ValueError):
+    def __init__(self, code: str, message: str):
+        super().__init__(message)
+        self.code = code
+        self.message = message
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -41,6 +50,7 @@ def create_token(subject: str, token_type: str, expires_delta: timedelta, extra:
     payload: Dict[str, Any] = {
         "sub": subject,
         "type": token_type,
+        "jti": str(uuid4()),
         "iat": int(now.timestamp()),
         "exp": int((now + expires_delta).timestamp()),
     }
@@ -72,8 +82,10 @@ def decode_token(token: str) -> Dict[str, Any]:
     settings = get_settings()
     try:
         return jwt.decode(token, settings.secret_key, algorithms=["HS256"])
+    except ExpiredSignatureError as exc:
+        raise TokenDecodeError("token_expired", "Token expired") from exc
     except JWTError as exc:
-        raise ValueError("Invalid token") from exc
+        raise TokenDecodeError("invalid_token", "Invalid token") from exc
 
 
 def hash_token(token: str) -> str:

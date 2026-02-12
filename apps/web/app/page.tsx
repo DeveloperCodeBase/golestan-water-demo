@@ -11,6 +11,15 @@ const features = [
   "گزارش‌های مدیریتی و فنی قابل خروجی پی‌دی‌اف/سی‌اس‌وی"
 ];
 
+const rfpCoverage = [
+  "تحلیل داده‌های تاریخی و برخط (هیدرولوژی، هواشناسی، مخزن، تقاضا)",
+  "مدلسازی سناریوهای تر/نرمال/خشک و ارزیابی اثر بر تامین بخش‌ها",
+  "تولید برنامه پیشنهادی رهاسازی با قیود ایمنی و محیط‌زیستی",
+  "مقایسه عملکرد تصمیم‌یار با روش سنتی قاعده‌محور (Baseline Mock)",
+  "پایش بحران و هشدارهای قابل پیگیری با ثبت رخداد",
+  "گزارش فنی/مدیریتی و مسیر آموزش بهره‌برداران"
+];
+
 export default function LandingPage() {
   return (
     <div dir="rtl" className="min-h-screen bg-background text-foreground">
@@ -58,6 +67,17 @@ export default function LandingPage() {
             ساختار فنی سامانه شامل داشبورد RTL ریسپانسیو، API استاندارد، RBAC، مسیر ممیزی، Seed داده ۵ ساله، گزارش‌گیری مدیریتی،
             و دستیار چت تخصصی است تا امکان ارائه حرفه‌ای، آموزش بهره‌برداران و توسعه عملیاتی در فازهای بعدی را فراهم کند.
           </p>
+        </section>
+
+        <section className="rounded-2xl border bg-card/80 p-5 shadow-soft md:p-8">
+          <h2 className="text-lg font-black md:text-2xl">پوشش الزامات RFP در این دمو</h2>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {rfpCoverage.map((item) => (
+              <div key={item} className="rounded-xl border bg-background/80 p-3 text-sm leading-6 text-muted-foreground">
+                {item}
+              </div>
+            ))}
+          </div>
         </section>
       </section>
       <SiteFooter />

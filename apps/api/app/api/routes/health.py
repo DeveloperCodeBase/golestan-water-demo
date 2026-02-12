@@ -9,6 +9,20 @@ from fastapi import Depends
 router = APIRouter(tags=["health"])
 
 
+@router.get("/")
+def root(request: Request):
+    return success_response(
+        request,
+        {
+            "service": "Golestan Water DSS API",
+            "status": "online",
+            "health": "/health",
+            "ready": "/ready",
+            "docs": "/docs",
+        },
+    )
+
+
 @router.get("/health")
 def health(request: Request):
     return success_response(request, {"status": "ok"})

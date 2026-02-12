@@ -7,4 +7,6 @@ __pycache__
 *.pyc
 .env
 .env.local
+apps/api/.env
+apps/web/.env
 apps/api/test.db

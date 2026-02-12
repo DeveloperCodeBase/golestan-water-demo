@@ -43,10 +43,10 @@ export function ExplainPanel({ token, defaultRunId }: { token: string | null; de
   return (
     <Card>
       <CardHeader>
-        <CardTitle>پنل توضیح تصمیم (LLM Stub)</CardTitle>
+        <CardTitle>پنل توضیح تصمیم (ماژول توضیح‌گر)</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <Input placeholder="شناسه اجرای بهینه‌سازی (run_id)" value={runId} onChange={(e) => setRunId(e.target.value)} />
+        <Input placeholder="شناسه اجرای بهینه‌سازی (شناسه اجرا)" value={runId} onChange={(e) => setRunId(e.target.value)} />
         <Textarea value={context} onChange={(e) => setContext(e.target.value)} />
         <Button onClick={onExplain} disabled={loading || !token || !runId}>
           {loading ? "در حال پردازش..." : "تولید توضیح"}

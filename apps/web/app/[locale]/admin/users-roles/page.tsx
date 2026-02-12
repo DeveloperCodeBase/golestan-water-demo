@@ -73,7 +73,7 @@ export default function UsersRolesPage({ params }: any) {
                   </option>
                 ))}
               </Select>
-              <Button type="submit" disabled={!token}>
+              <Button className="w-full" type="submit" disabled={!token}>
                 ایجاد کاربر
               </Button>
               {message ? <p className="text-xs text-muted-foreground">{message}</p> : null}
@@ -82,7 +82,16 @@ export default function UsersRolesPage({ params }: any) {
 
           <div className="xl:col-span-2">
             <Panel title="لیست کاربران">
-              <div className="overflow-x-auto">
+              <div className="space-y-2 sm:hidden">
+                {users.data.map((user) => (
+                  <article key={user.id} className="rounded-lg border p-2 text-xs">
+                    <p className="font-semibold">{user.username}</p>
+                    <p className="text-muted-foreground">نقش‌ها: {(user.roles ?? []).join("، ") || "-"}</p>
+                    <p className="text-muted-foreground">فعال: {user.is_active ? "بله" : "خیر"}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="hidden overflow-x-auto sm:block">
                 <Table className="min-w-[760px]">
                   <TableHeader>
                     <TableRow>
@@ -109,4 +118,3 @@ export default function UsersRolesPage({ params }: any) {
     </ModulePage>
   );
 }
-

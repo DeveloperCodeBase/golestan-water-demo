@@ -75,7 +75,7 @@ export function ChatbotPopup() {
           <header className="flex items-center justify-between border-b px-3 py-2">
             <div className="flex items-center gap-2">
               <Bot className="h-4 w-4 text-primary" />
-              <p className="text-xs font-bold">دستیار پروژه (OpenRouter)</p>
+              <p className="text-xs font-bold">دستیار هوشمند پروژه</p>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
               <X className="h-4 w-4" />

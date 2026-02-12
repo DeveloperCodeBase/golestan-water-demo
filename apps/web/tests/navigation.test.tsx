@@ -11,7 +11,7 @@ vi.mock("next/navigation", () => ({
 
 describe("navigation", () => {
   it("renders primary menu links", () => {
-    render(
+    const { container } = render(
       <AppShell locale="fa">
         <div>content</div>
       </AppShell>
@@ -20,5 +20,7 @@ describe("navigation", () => {
     expect(screen.getAllByText("نمای کلی").length).toBeGreaterThan(0);
     expect(screen.getAllByText("پایش زنده").length).toBeGreaterThan(0);
     expect(screen.getByText("content")).toBeInTheDocument();
+    const shell = container.firstElementChild as HTMLElement;
+    expect(shell.className).toContain("lg:flex-row-reverse");
   });
 });

@@ -9,6 +9,7 @@ from app.api.deps import serialize_user
 from app.core.config import get_settings
 from app.core.security import (
     PasswordPolicyError,
+    TokenDecodeError,
     create_access_token,
     create_refresh_token,
     decode_token,
@@ -84,7 +85,11 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
 
 @router.post("/refresh")
 def refresh(payload: RefreshRequest, request: Request, db: Session = Depends(get_db)):
-    token_data = decode_token(payload.refresh_token)
+    try:
+        token_data = decode_token(payload.refresh_token)
+    except TokenDecodeError as exc:
+        raise HTTPException(status_code=401, detail={"code": exc.code, "message": exc.message}) from exc
+
     if token_data.get("type") != "refresh":
         raise HTTPException(status_code=401, detail={"code": "invalid_token", "message": "Invalid refresh token"})
 

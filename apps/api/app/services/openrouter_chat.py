@@ -91,7 +91,7 @@ async def generate_chat_response(message: str, history: List[Dict[str, str]] | N
         return {
             "answer": BUILDER_REPLY,
             "in_scope": True,
-            "provider": "rule",
+            "provider": "rule_engine",
             "model": "ownership-policy",
         }
 
@@ -99,7 +99,7 @@ async def generate_chat_response(message: str, history: List[Dict[str, str]] | N
         return {
             "answer": SCOPE_REJECTION,
             "in_scope": False,
-            "provider": "rule",
+            "provider": "rule_engine",
             "model": "scope-guard",
         }
 
@@ -107,12 +107,12 @@ async def generate_chat_response(message: str, history: List[Dict[str, str]] | N
     if not settings.openrouter_api_key:
         return {
             "answer": (
-                "پاسخ این سوال در دامنه پروژه است، اما کلید OpenRouter در سرور تنظیم نشده است. "
-                "پس از تنظیم `OPENROUTER_API_KEY` پاسخ مدل زبانی فعال می‌شود."
+                "پاسخ این سوال در دامنه پروژه است، اما سرویس پاسخ هوشمند در حال حاضر در دسترس نیست. "
+                "تنظیمات سرویس مدل زبانی سرور را بررسی کنید."
             ),
             "in_scope": True,
-            "provider": "rule",
-            "model": "missing-openrouter-key",
+            "provider": "rule_engine",
+            "model": "missing-llm-config",
         }
 
     safe_history = []
@@ -146,9 +146,9 @@ async def generate_chat_response(message: str, history: List[Dict[str, str]] | N
             data = response.json()
     except httpx.HTTPError:
         return {
-            "answer": "در ارتباط با سرویس مدل زبانی خطا رخ داد. لطفا دوباره تلاش کنید.",
+            "answer": "در ارتباط با سرویس پاسخ هوشمند خطا رخ داد. لطفا چند دقیقه دیگر دوباره تلاش کنید.",
             "in_scope": True,
-            "provider": "openrouter",
+            "provider": "llm_gateway",
             "model": settings.openrouter_model,
         }
 
@@ -159,6 +159,6 @@ async def generate_chat_response(message: str, history: List[Dict[str, str]] | N
     return {
         "answer": answer,
         "in_scope": True,
-        "provider": "openrouter",
+        "provider": "llm_gateway",
         "model": data.get("model", settings.openrouter_model),
     }

@@ -20,7 +20,7 @@ export function FilterDrawer() {
           فیلترها
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="right-0 left-auto text-right" dir="rtl">
         <DialogTitle className="mb-4 text-sm font-semibold">فیلترهای عملیاتی</DialogTitle>
         <div className="space-y-3">
           <Select defaultValue="normal">

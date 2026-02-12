@@ -41,7 +41,21 @@ export default function DatasetsPage({ params }: any) {
       empty={!datasets.loading && datasets.data.length === 0}
     >
       <Panel title="ثبت، نسخه‌بندی و پایش وضعیت Datasetها">
-        <div className="overflow-x-auto">
+        <div className="space-y-2 sm:hidden">
+          {datasets.data.map((dataset) => (
+            <article key={dataset.id} className="rounded-lg border p-3 text-xs">
+              <p className="font-semibold">{datasetLabel[dataset.name] ?? dataset.name}</p>
+              <p className="mt-1 text-muted-foreground">دسته: {categoryLabel[dataset.category] ?? dataset.category}</p>
+              <p className="text-muted-foreground">نسخه جاری: {dataset.latest_version}</p>
+              <p className="text-muted-foreground">ایجاد: {formatDatePersian(dataset.created_at)}</p>
+              <div className="mt-2">
+                <Badge>{datasetStatusLabel[dataset.current_status] ?? dataset.current_status}</Badge>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="hidden overflow-x-auto sm:block">
           <Table className="min-w-[760px]">
             <TableHeader>
               <TableRow>

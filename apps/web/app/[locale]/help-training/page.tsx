@@ -38,13 +38,13 @@ export default function HelpTrainingPage({ params }: any) {
       </div>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-3">
-        <Panel title="SOP در شرایط خشکسالی">
+        <Panel title="رویه استاندارد در شرایط خشکسالی">
           <p className="text-sm leading-7 text-muted-foreground">
             تمرکز روی کاهش ریسک کمبود: افزایش وزن شرب و محیط‌زیست، کاهش سهم کشاورزی کوتاه‌مدت، کنترل افت ذخیره و اجرای سناریوهای
             حساسیت با ضریب ورودی پایین.
           </p>
         </Panel>
-        <Panel title="SOP در شرایط سیلاب">
+        <Panel title="رویه استاندارد در شرایط سیلاب">
           <p className="text-sm leading-7 text-muted-foreground">
             تمرکز روی کاهش ریسک سرریز: بازبینی سقف رهاسازی ایمن، پیش‌تخلیه کنترل‌شده، و پایش ساعتی ورودی‌ها در بازه‌های بارش شدید.
           </p>
@@ -60,7 +60,7 @@ export default function HelpTrainingPage({ params }: any) {
       </div>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
-        <Panel title="سوالات متداول (FAQ)">
+        <Panel title="سوالات متداول">
           <ul className="list-inside list-disc space-y-2 text-sm text-muted-foreground">
             <li>اگر داده ناقص باشد چه می‌شود؟ سامانه در بخش کیفیت داده پرچم مشکوک/ناقص می‌زند.</li>
             <li>چرا Run جدید با Run قبلی متفاوت است؟ به‌دلیل تغییر سناریو، وزن‌ها یا قیود.</li>
@@ -75,7 +75,25 @@ export default function HelpTrainingPage({ params }: any) {
           </ul>
         </Panel>
       </div>
+
+      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+        <Panel title="برنامه آموزشی پیشنهادی بهره‌برداران">
+          <ol className="list-inside list-decimal space-y-2 text-sm text-muted-foreground">
+            <li>جلسه ۱ (۹۰ دقیقه): آشنایی با داده‌ها، سنجه‌های کیفیت و مدیریت دسترسی‌ها.</li>
+            <li>جلسه ۲ (۹۰ دقیقه): پیش‌بینی، بک‌تست، تفسیر عدم‌قطعیت و رجیستری مدل.</li>
+            <li>جلسه ۳ (۱۲۰ دقیقه): اجرای بهینه‌سازی، سناریوسازی، مدیریت بحران و گزارش‌گیری.</li>
+            <li>ارزیابی نهایی: اجرای یک سناریوی خشک و یک سناریوی سیلابی با گزارش مدیریتی.</li>
+          </ol>
+        </Panel>
+        <Panel title="چک‌لیست تحویل شیفت">
+          <ul className="list-inside list-disc space-y-2 text-sm text-muted-foreground">
+            <li>آخرین اجرای بهینه‌سازی به همراه پارامترها ثبت شده باشد.</li>
+            <li>هشدارهای باز، وضعیت رسیدگی و اقدام پیشنهادی ثبت شده باشد.</li>
+            <li>تغییرات کاربران/نقش‌ها در گزارش ممیزی کنترل شده باشد.</li>
+            <li>گزارش خلاصه شیفت در قالب PDF ذخیره و آرشیو شده باشد.</li>
+          </ul>
+        </Panel>
+      </div>
     </ModulePage>
   );
 }
-

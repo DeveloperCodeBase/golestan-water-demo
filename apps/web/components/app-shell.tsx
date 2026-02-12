@@ -27,7 +27,7 @@ function NavLink({ href, text, active }: { href: string; text: string; active: b
     <Link
       href={href}
       className={cn(
-        "block rounded-md px-3 py-2 text-xs transition",
+        "block cursor-pointer rounded-md px-3 py-2 text-right text-xs transition",
         active
           ? "bg-primary/10 text-primary ring-1 ring-primary/30"
           : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
@@ -71,10 +71,10 @@ export function AppShell({ locale, children }: Props) {
   };
 
   return (
-    <div className={cn("min-h-screen", locale === "fa" ? "xl:flex xl:flex-row-reverse" : "xl:flex")}>
-      <aside className="hidden xl:flex xl:h-screen xl:w-[340px] xl:flex-col xl:border-l xl:bg-card/90 xl:backdrop-blur">
+    <div className="min-h-screen lg:flex lg:flex-row-reverse" dir={locale === "fa" ? "rtl" : "ltr"}>
+      <aside className="hidden lg:order-2 lg:flex lg:h-screen lg:w-[330px] lg:flex-col lg:border-l lg:bg-card/90 lg:backdrop-blur">
         <div className="border-b p-4">
-          <p className="text-sm font-bold">سامانه تصمیم‌یار مدیریت رهاسازی آب</p>
+          <p className="text-right text-sm font-bold">سامانه تصمیم‌یار مدیریت رهاسازی آب</p>
           <p className="mt-1 text-xs text-muted-foreground">سد گلستان ← سد وشمگیر</p>
         </div>
 
@@ -84,8 +84,8 @@ export function AppShell({ locale, children }: Props) {
             const GroupIcon = group.icon;
 
             return (
-              <section key={group.id} className={cn("rounded-xl border p-2", groupActive ? "border-primary/40 bg-primary/5" : "")}> 
-                <div className="mb-2 flex items-center gap-2 px-2 text-sm font-semibold">
+              <section key={group.id} className={cn("rounded-xl border p-2", groupActive ? "border-primary/40 bg-primary/5" : "")}>
+                <div className="mb-2 flex items-center gap-2 px-2 text-right text-sm font-semibold">
                   <GroupIcon className="h-4 w-4" />
                   <span>{label(locale, group)}</span>
                 </div>
@@ -121,9 +121,9 @@ export function AppShell({ locale, children }: Props) {
         </div>
       </aside>
 
-      <div className="flex-1">
-        <header className="sticky top-0 z-30 border-b bg-card/95 px-3 py-2 backdrop-blur xl:hidden">
-          <div className="mx-auto flex max-w-[1700px] items-center justify-between">
+      <div className="lg:order-1 lg:flex-1">
+        <header className="sticky top-0 z-30 border-b bg-card/95 px-3 py-2 backdrop-blur lg:hidden">
+          <div className="mx-auto flex max-w-[1700px] flex-row-reverse items-center justify-between">
             <Button variant="outline" size="sm" className="bg-card" onClick={() => setOpen(true)}>
               <Menu className="h-4 w-4" />
               <span className="mr-2">منو</span>
@@ -133,7 +133,7 @@ export function AppShell({ locale, children }: Props) {
         </header>
 
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="right-0 left-auto w-[92vw] max-w-sm border-l border-r-0">
+          <DialogContent className="right-0 left-auto w-[92vw] max-w-sm border-l border-r-0 text-right" dir="rtl">
             <DialogTitle className="mb-3 text-sm">منوی سامانه</DialogTitle>
             <div className="max-h-[70vh] space-y-3 overflow-y-auto">
               {visibleGroups.map((group) => (

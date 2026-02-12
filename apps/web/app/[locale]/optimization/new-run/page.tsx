@@ -83,7 +83,7 @@ export default function NewOptimizationRunPage({ params }: any) {
       empty={false}
     >
       <Panel title="توضیح عملکرد بهینه‌ساز">
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <div className="rounded-lg border p-3">
             <p className="text-xs font-semibold text-muted-foreground">مرحله ۱: برآورد ورودی و تقاضا</p>
             <p className="mt-1 text-sm">بر اساس سناریوی تر/نرمال/خشک، ورودی و تقاضای پایه تعدیل می‌شوند.</p>
@@ -113,7 +113,7 @@ export default function NewOptimizationRunPage({ params }: any) {
         </CardHeader>
         <CardContent className="space-y-4">
           {step === 1 ? (
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-xs">افق زمانی (روز)</label>
                 <Input type="number" value={horizon} min={7} max={30} onChange={(e) => setHorizon(Number(e.target.value))} />
@@ -130,7 +130,7 @@ export default function NewOptimizationRunPage({ params }: any) {
           ) : null}
 
           {step === 2 ? (
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(weights).map(([key, value]) => (
                 <div key={key}>
                   <label className="mb-1 block text-xs">وزن هدف - {sectorFa[key] ?? key}</label>
@@ -146,7 +146,7 @@ export default function NewOptimizationRunPage({ params }: any) {
           ) : null}
 
           {step === 3 ? (
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(constraints).map(([key, value]) => (
                 <div key={key}>
                   <label className="mb-1 block text-xs">{constraintFa[key] ?? key}</label>
@@ -160,14 +160,14 @@ export default function NewOptimizationRunPage({ params }: any) {
             </div>
           ) : null}
 
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" disabled={step === 1} onClick={() => setStep((s) => Math.max(1, s - 1))}>
+          <div className="grid gap-2 sm:flex sm:flex-wrap">
+            <Button className="w-full sm:w-auto" variant="outline" disabled={step === 1} onClick={() => setStep((s) => Math.max(1, s - 1))}>
               مرحله قبلی
             </Button>
             {step < 3 ? (
-              <Button onClick={() => setStep((s) => Math.min(3, s + 1))}>مرحله بعدی</Button>
+              <Button className="w-full sm:w-auto" onClick={() => setStep((s) => Math.min(3, s + 1))}>مرحله بعدی</Button>
             ) : (
-              <Button onClick={runOptimization} disabled={loading || !token || !canRunOptimization}>
+              <Button className="w-full sm:w-auto" onClick={runOptimization} disabled={loading || !token || !canRunOptimization}>
                 {loading ? "در حال اجرای مدل..." : "اجرای بهینه‌سازی"}
               </Button>
             )}
@@ -202,7 +202,16 @@ export default function NewOptimizationRunPage({ params }: any) {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="space-y-2 sm:hidden">
+              {Object.entries(result.summary?.satisfaction_by_sector ?? {}).map(([key, value]) => (
+                <div key={key} className="rounded-lg border p-2">
+                  <p className="text-xs text-muted-foreground">{sectorFa[key] ?? key}</p>
+                  <p className="text-base font-bold">{Math.round(Number(value) * 100)}%</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
               <Table className="min-w-[640px]">
                 <TableHeader>
                   <TableRow>
@@ -232,4 +241,3 @@ export default function NewOptimizationRunPage({ params }: any) {
     </ModulePage>
   );
 }
-

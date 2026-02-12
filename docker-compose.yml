@@ -5,15 +5,15 @@ services:
     container_name: golestan-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: golestan
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-golestan}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - golestan_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d golestan"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-golestan}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -23,7 +23,7 @@ services:
     container_name: golestan-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -37,12 +37,24 @@ services:
     container_name: golestan-api
     restart: unless-stopped
     env_file:
-      - ./apps/api/.env.docker
+      - path: ./apps/api/.env.docker
+        required: true
+      - path: ./apps/api/.env
+        required: false
+    environment:
+      ENV: docker
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-golestan}
+      REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
     ports:
       - "8000:8000"
 
@@ -61,7 +73,8 @@ services:
       NEXT_PUBLIC_DEFAULT_LOCALE: fa
       NEXT_PUBLIC_ENABLE_EN: "true"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
       - "3000:3000"
 

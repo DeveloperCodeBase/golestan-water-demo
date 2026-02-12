@@ -10,7 +10,7 @@ import { Panel } from "@/components/panel";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { apiBaseUrl, useApiQuery, useApiToken } from "@/lib/api-client";
+import { authedGetBlob, useApiQuery, useApiToken } from "@/lib/api-client";
 import { formatDatePersian } from "@/lib/format";
 
 const sectorLabel: Record<string, string> = {
@@ -28,6 +28,7 @@ export default function ReleasePlansPage({ params }: any) {
   const runsQuery = useApiQuery<Array<any>>("/optimization/runs?page=1&page_size=20", []);
   const [runId, setRunId] = useState(startRunId);
   const { token } = useApiToken();
+  const [exportMessage, setExportMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!runId && runsQuery.data.length) {
@@ -56,17 +57,19 @@ export default function ReleasePlansPage({ params }: any) {
 
   const exportFile = async (format: "csv" | "pdf") => {
     if (!token || !runId) return;
-    const response = await fetch(`${apiBaseUrl()}/release-plans/${runId}/export?format=${format}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!response.ok) return;
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `barname-rahasazi-${runId}.${format}`;
-    a.click();
-    URL.revokeObjectURL(url);
+    setExportMessage(null);
+    try {
+      const blob = await authedGetBlob(`/release-plans/${runId}/export?format=${format}`, token);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `barname-rahasazi-${runId}.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setExportMessage(`فایل ${format.toUpperCase()} با موفقیت آماده و دانلود شد.`);
+    } catch {
+      setExportMessage("خطا در تولید خروجی. لطفا دوباره تلاش کنید.");
+    }
   };
 
   return (
@@ -78,16 +81,17 @@ export default function ReleasePlansPage({ params }: any) {
       error={runsQuery.error || (planQuery.error && runId ? "خطا در دریافت برنامه رهاسازی" : null)}
       empty={!runsQuery.loading && runsQuery.data.length === 0}
     >
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <Select value={runId} onChange={(e) => setRunId(e.target.value)} className="max-w-md">
+      <div className="mb-3 grid gap-2 md:flex md:flex-wrap md:items-center">
+        <Select value={runId} onChange={(e) => setRunId(e.target.value)} className="max-w-xl">
           {runsQuery.data.map((run) => (
             <option key={run.id} value={run.id}>
               {run.name} - {(run.params?.scenario === "wet" ? "تر" : run.params?.scenario === "dry" ? "خشک" : "نرمال")}
             </option>
           ))}
         </Select>
-        <Button variant="outline" onClick={() => exportFile("csv")}>خروجی سی‌اس‌وی</Button>
-        <Button variant="outline" onClick={() => exportFile("pdf")}>خروجی پی‌دی‌اف</Button>
+        <Button className="w-full md:w-auto" variant="outline" onClick={() => exportFile("csv")}>خروجی سی‌اس‌وی</Button>
+        <Button className="w-full md:w-auto" variant="outline" onClick={() => exportFile("pdf")}>خروجی پی‌دی‌اف</Button>
+        {exportMessage ? <p className="text-xs text-muted-foreground">{exportMessage}</p> : null}
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
@@ -100,7 +104,18 @@ export default function ReleasePlansPage({ params }: any) {
       </div>
 
       <Panel title="جدول برنامه رهاسازی">
-        <div className="overflow-x-auto">
+        <div className="space-y-2 sm:hidden">
+          {planQuery.data.rows.slice(0, 40).map((row) => (
+            <article key={row.id} className="rounded-lg border p-2 text-xs">
+              <p className="font-semibold">{formatDatePersian(row.ts)}</p>
+              <p className="text-muted-foreground">رهاسازی: {row.release_value?.toFixed?.(2) ?? row.release_value}</p>
+              <p className="text-muted-foreground">ذخیره پیش‌بینی: {row.storage_projection?.toFixed?.(2) ?? row.storage_projection}</p>
+              <p className="text-muted-foreground">ریسک: {row.risk_index?.toFixed?.(2) ?? row.risk_index}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="hidden overflow-x-auto sm:block">
           <Table className="min-w-[760px]">
             <TableHeader>
               <TableRow>

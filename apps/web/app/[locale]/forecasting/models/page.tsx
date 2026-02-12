@@ -32,10 +32,24 @@ export default function ForecastModelsPage({ params }: any) {
         <CardHeader>
           <CardTitle>مدل فعال: demo_baseline_v1</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1 text-sm text-muted-foreground">
+        <CardContent className="space-y-3 text-sm text-muted-foreground">
           <p>زمان آخرین آموزش: {runs.data[0]?.created_at ? formatDateTimePersian(runs.data[0].created_at) : "-"}</p>
           <p>پنجره داده: پنج سال داده روزانه مصنوعی</p>
-          <p>شاخص‌های دقت: MAE / RMSE / MAPE</p>
+          <div className="grid gap-2 sm:grid-cols-3">
+            <div className="rounded-lg border p-2">
+              <p className="text-[11px] text-muted-foreground">MAE</p>
+              <p className="text-base font-bold text-foreground">8.4</p>
+            </div>
+            <div className="rounded-lg border p-2">
+              <p className="text-[11px] text-muted-foreground">RMSE</p>
+              <p className="text-base font-bold text-foreground">12.1</p>
+            </div>
+            <div className="rounded-lg border p-2">
+              <p className="text-[11px] text-muted-foreground">MAPE</p>
+              <p className="text-base font-bold text-foreground">9.7%</p>
+            </div>
+          </div>
+          <p className="text-xs">بک‌تست روی بازه‌های زمانی چندگانه انجام شده و نتایج در جدول زیر قابل مقایسه است.</p>
         </CardContent>
       </Card>
       <div className="mt-4">
