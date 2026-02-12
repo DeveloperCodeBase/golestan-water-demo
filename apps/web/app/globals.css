@@ -1,0 +1,108 @@
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/500.css";
+@import "@fontsource/vazirmatn/700.css";
+@import "react-multi-date-picker/styles/layouts/mobile.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 196 42% 97%;
+  --foreground: 204 48% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 204 48% 16%;
+  --border: 200 28% 85%;
+  --muted: 196 34% 93%;
+  --muted-foreground: 203 24% 38%;
+  --primary: 193 85% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 36 95% 93%;
+  --secondary-foreground: 28 52% 25%;
+  --success: 152 60% 35%;
+  --warning: 35 90% 46%;
+  --danger: 4 68% 48%;
+}
+
+.dark {
+  --background: 204 50% 8%;
+  --foreground: 195 32% 90%;
+  --card: 204 38% 12%;
+  --card-foreground: 195 32% 90%;
+  --border: 203 26% 28%;
+  --muted: 205 28% 18%;
+  --muted-foreground: 198 18% 66%;
+  --primary: 183 84% 46%;
+  --primary-foreground: 205 60% 8%;
+  --secondary: 30 52% 24%;
+  --secondary-foreground: 39 88% 83%;
+  --success: 150 65% 45%;
+  --warning: 38 95% 55%;
+  --danger: 7 78% 58%;
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  @apply bg-background text-foreground;
+  background-image:
+    radial-gradient(1400px circle at 12% 3%, rgba(0, 167, 193, 0.11), transparent 48%),
+    radial-gradient(900px circle at 92% 10%, rgba(243, 180, 57, 0.12), transparent 44%),
+    radial-gradient(1200px circle at 50% 102%, rgba(33, 161, 138, 0.09), transparent 50%);
+  min-height: 100vh;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.35s ease both;
+}
+
+a,
+button,
+[role="button"],
+summary {
+  cursor: pointer;
+}
+
+.pulse-border {
+  animation: pulseBorder 1.9s ease-in-out infinite;
+}
+
+@keyframes pulseBorder {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(5, 150, 105, 0);
+  }
+}
+
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+  text-align: right;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 71, 98, 0.35);
+  border-radius: 12px;
+}

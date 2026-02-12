@@ -1,0 +1,16 @@
+{
+  "name": "golestan-water",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/web",
+    "packages/ui",
+    "packages/shared"
+  ],
+  "scripts": {
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:test": "npm --prefix apps/web run test",
+    "api:test": "python3 -m pytest -q apps/api/tests"
+  }
+}

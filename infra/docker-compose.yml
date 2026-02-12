@@ -1,0 +1,69 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: golestan-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: golestan
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - golestan_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d golestan"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: golestan-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    container_name: golestan-api
+    restart: unless-stopped
+    env_file:
+      - ../apps/api/.env.docker
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+      args:
+        NEXT_INTERNAL_API_URL: http://api:8000
+        NEXT_PUBLIC_API_URL: /backend
+    container_name: golestan-web
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: /backend
+      NEXT_INTERNAL_API_URL: http://api:8000
+      NEXT_PUBLIC_DEFAULT_LOCALE: fa
+      NEXT_PUBLIC_ENABLE_EN: "true"
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+
+volumes:
+  golestan_pgdata:

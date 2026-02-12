@@ -1,0 +1,10 @@
+node_modules
+.next
+coverage
+*.log
+__pycache__
+.pytest_cache
+*.pyc
+.env
+.env.local
+apps/api/test.db
