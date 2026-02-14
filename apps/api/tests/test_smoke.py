@@ -93,7 +93,7 @@ def test_auth_and_core_endpoints():
     )
     assert owner_chat.status_code == 200
     answer = owner_chat.json()["data"]["answer"]
-    assert "شرکت شبکه هوشمند ابتکار ویستا" in answer
+    assert "مرکز راهبری پژوهش و پیشرفت هوش مصنوعی جهاددانشگاهی" in answer
 
 
 def test_invalid_or_expired_token_returns_401_not_500():

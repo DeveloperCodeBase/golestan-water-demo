@@ -71,7 +71,7 @@ export default function LoginPage() {
             <div className="flex w-full items-center gap-3 rounded-2xl border bg-card/90 px-4 py-3 shadow-glass backdrop-blur sm:w-auto">
               <Image
                 src="/company-logo.svg"
-                alt="لوگوی شرکت شبکه هوشمند ابتکار ویستا"
+                alt="لوگوی مرکز راهبری پژوهش و پیشرفت هوش مصنوعی جهاددانشگاهی"
                 width={56}
                 height={56}
                 className="h-12 w-12 shrink-0 object-contain"
@@ -79,7 +79,7 @@ export default function LoginPage() {
               />
               <div className="text-right">
                 <p className="text-[11px] text-muted-foreground">ورود به سامانه تصمیم‌یار مدیریت رهاسازی آب</p>
-                <p className="text-sm font-extrabold">شرکت شبکه هوشمند ابتکار ویستا</p>
+                <p className="text-sm font-extrabold">مرکز راهبری پژوهش و پیشرفت هوش مصنوعی جهاددانشگاهی</p>
               </div>
             </div>
           </section>
@@ -108,13 +108,13 @@ export default function LoginPage() {
                 <div className="flex items-center gap-3 rounded-xl border bg-background/70 p-3 lg:hidden">
                   <Image
                     src="/company-logo.svg"
-                    alt="لوگوی شرکت شبکه هوشمند ابتکار ویستا"
+                    alt="لوگوی مرکز راهبری پژوهش و پیشرفت هوش مصنوعی جهاددانشگاهی"
                     width={42}
                     height={42}
                     className="h-10 w-10 shrink-0 object-contain"
                   />
                   <div className="text-right">
-                    <p className="text-[11px] text-muted-foreground">شبکه هوشمند ابتکار ویستا</p>
+                    <p className="text-[11px] text-muted-foreground">مرکز راهبری پژوهش و پیشرفت هوش مصنوعی جهاددانشگاهی</p>
                     <p className="text-xs font-bold">سامانه تصمیم‌یار مدیریت آب</p>
                   </div>
                 </div>
